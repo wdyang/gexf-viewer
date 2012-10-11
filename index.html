@@ -46,10 +46,10 @@
 	    </div>
 	</div>
   
-	<div class="container">
-		<div class="row">
+	<div class="container-fluid">
+		<div class="row-fluid">
 			<!-- <h2 class="span12" id="post-title">Gexf viewer with sigma.js</h2> -->
-			<div class="span6 buttons-container">
+			<div class="span12"> <!-- buttons-container"> -->
 				<button class="btn" id="stop-layout">Start Layout</button>
 				<button class="btn" id="rescale-graph">Rescale Graph</button>
 				<button class="btn" id="clear-graph">Clear Graph</button>
@@ -57,24 +57,46 @@
 				<input type="number" min="0" max="1.0" step=0.01 value=0.0 id="group_separation">
 				<select id="data-file-select">
 				</select>
-				<div class="span12 sigma-parent" id="sigma-example-parent">
-					<div class="sigma-expand" id="sigma-example"></div>
-				</div>
+			</div>
 		</div>
-  </div>
+		<div class="row-fluid">
+			<div class="span12">
+				<div id="info-panel">
+					<p>This is span2, which shows all the relevant information</p>
+				</div>
+				<!-- <div class="span10 full-height"> -->
+					<div class="sigma-parent full-height" id="sigma-example-parent">
+						<div class="sigma-expand" id="sigma-example"></div>
+					</div>
+				<!-- </div> -->
+			</div>
+	  </div>
 
   <script src="visualizegexf.js"></script>
 
   <style type="text/css">
     /* sigma.js context : */
     .sigma-parent {
-      position: relative;
       border-radius: 4px;
       -moz-border-radius: 4px;
       -webkit-border-radius: 4px;
       background: #000;
-      height: 800px;
-    }
+	  position: absolute;
+	  top: 115px;
+	  left: 5px;
+	  right: 18%;
+	  bottom: 5px;
+/*      position: relative;
+      height: 600px;
+*/    }
+	#info-panel {
+  	  position: absolute;
+  	  top:115px;
+  	  left: 82%;
+  	  right: 5px;
+  	  bottom: 5px;
+	  color: white;
+	}
     .sigma-expand {
       position: absolute;
       width: 100%;
@@ -86,16 +108,27 @@
       padding-bottom: 8px;
       padding-top: 12px;
     }
-    body {
-      padding-top: 60px;
-      padding-bottom: 200px;
-    	background-color: #101020;
+/*	.btn{
+		background-color: #101020;
+		color: white;
+	}
+*/    body {
+		padding-top: 20px;
+		padding-bottom: 0px;
+		padding-left: 20px;
+		padding-right: 20px;
+		background-color: #101020;
+		height: 100%;
     }
     #group_separation {
+	background-color: #101020;
+	color: white;
   	  width: 70px;
     }
     #data-file-select {
-  	  width: 400px;
+		background-color: black;
+		color: white;
+  	  width: 350px;
     }
     .navbar.navbar-fixed-top{
 		background-color: #101020;
