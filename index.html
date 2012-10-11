@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gephi: JavaScript GEXF Viewer</title>
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	<meta name="viewport"
+	    content="user-scalable=no, width=device-width" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link href="http://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
+    <style type="text/css" media="all">
+    body {
+      padding-top: 60px;
+      padding-bottom: 200px;
+	  background-color: black;
+    }
+    </style>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/prettify.css">
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <script src="js/prettify.js"></script>
+    <script src="js/sigma.concat.js"></script>
+    <script src="plugins/sigma.forceatlas2.js"></script>
+    <script src="plugins/sigma.parseGexf.js"></script>
+</head>
+
+
+<body> <!-- background-color="black" onload="prettyPrint();"> -->
+	<div class="navbar navbar-fixed-top">
+	    <div class="navbar-inner">
+	      <div class="container">
+	        <a class="brand sigma-font" href="/">sigma.js</a>
+	        <div class="nav-collapse">
+	          <ul class="nav">
+	            <li><a href="/">Home</a></li>
+	          </ul>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+  
+	<div class="container">
+		<div class="row">
+			<!-- <h2 class="span12" id="post-title">Gexf viewer with sigma.js</h2> -->
+			<div class="span6 buttons-container">
+				<button class="btn" id="stop-layout">Start Layout</button>
+				<button class="btn" id="rescale-graph">Rescale Graph</button>
+				<button class="btn" id="clear-graph">Clear Graph</button>
+				<label>Group seperation strength 0-1</label>
+				<input type="number" min="0" max="1.0" step=0.01 value=0.0 id="group_separation">
+				<select id="data-file-select">
+				</select>
+				<div class="span12 sigma-parent" id="sigma-example-parent">
+					<div class="sigma-expand" id="sigma-example"></div>
+				</div>
+		</div>
+  </div>
+
+  <script src="visualizegexf.js"></script>
+
+  <style type="text/css">
+    /* sigma.js context : */
+    .sigma-parent {
+      position: relative;
+      border-radius: 4px;
+      -moz-border-radius: 4px;
+      -webkit-border-radius: 4px;
+      background: #000;
+      height: 800px;
+    }
+    .sigma-expand {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+    .buttons-container{
+      padding-bottom: 8px;
+      padding-top: 12px;
+    }
+    body {
+      padding-top: 60px;
+      padding-bottom: 200px;
+    	background-color: #101020;
+    }
+    #group_separation {
+  	  width: 70px;
+    }
+    #data-file-select {
+  	  width: 400px;
+    }
+    .navbar.navbar-fixed-top{
+		background-color: #101020;
+    }
+  </style>
+
+</body>
+</html>
