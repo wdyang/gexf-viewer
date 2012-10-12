@@ -20,6 +20,7 @@ $(document).ready(function(){
 
 	$('.navbar.navbar-fixed-top').hide();
 	
+	//pull list of gexf files from server populate into select UI.
 	$.ajax({
 		url: 'listgexf.php', 
 		dataType: 'text', 
@@ -32,6 +33,36 @@ $(document).ready(function(){
 			});
 		}
 	});
+	
+    $('#show-edges').click(function(){
+		if (!window.EdgeShowing){
+			if (typeof(sigInst)!='undefined'){
+				sigInst.dispatch('downgraph'); //first clear the graph
+				sigInst._core.graph.edges.forEach(function(e){
+					e.color=e.source.color;
+					e.hidden=false;
+				});
+				sigInst.draw(2,2,2);
+			}
+			window.EdgeShowing=true;
+			this.innerHTML='Hide Edges';
+		}else{
+			if (typeof(sigInst)!='undefined'){
+				sigInst.dispatch('downgraph');
+				sigInst._core.graph.edges.forEach(function(e){
+					// e.color=e.source.color;
+					e.hidden=true;
+				});
+				sigInst.draw(2,2,2);
+			}
+			window.EdgeShowing=false;
+			this.innerHTML='Show Edges';
+		}
+	});
+	var EdgeShowing=false;
+	window.EdgeShowing=EdgeShowing;
+	
+	// $('#info-panel').dragscrollable();
 });
 
 function init(gexffile) {
@@ -61,9 +92,12 @@ function init(gexffile) {
   sigInst.parseGexf('data/'+gexffile);
   
   //default edge color setting by sigma.init not working. Manually set here
-  var edgeGreyColor = '#000';
+  var edgeGreyColor = '#404040';
   var nodeGreyColor = '#404040';
-  sigInst._core.graph.edges.forEach(function(e){  e.color=edgeGreyColor; });
+  // sigInst._core.graph.edges.forEach(function(e){  e.color=edgeGreyColor; });
+  // var EdgeShowing=false;
+  // window.EdgeShowing=EdgeShowing;
+  sigInst._core.graph.edges.forEach(function(e){  e.hidden=true; });
   
   //finding the index of TITLE in nodes attributes
   var n0=sigInst._core.graph.nodes[0];
@@ -134,15 +168,20 @@ function init(gexffile) {
       var nodes = event.content;
 	  // console.log(nodes);
       var neighbors = {};
+	  var info_text=$('<ul>');
       sigInst.iterEdges(function(e){
         if(nodes.indexOf(e.source)<0 && nodes.indexOf(e.target)<0){   //edge doesn't include highlighted node
-			e.color = edgeGreyColor;
-			e.hidden=true;
+			if(window.EdgeShowing){
+				e.color = edgeGreyColor;
+				e.hidden=false;
+			}else{
+				e.hidden=true;
+			}
         }else{
-		  e.color = nodes[0].color;
- 		  e.hidden=false;
-          neighbors[e.source] = 1;
-          neighbors[e.target] = 1;
+			e.color = e.source.color;
+			e.hidden=false;
+			neighbors[e.source] = 1;
+			neighbors[e.target] = 1;
 	  	}
       }).iterNodes(function(n){
         if(!neighbors[n.id]){
@@ -154,18 +193,32 @@ function init(gexffile) {
         }else{
           n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
           n.attr['grey'] = 0;
+		  info_text.append('<li>'+n.label+'</li>');
         }
       }).draw(2,2,2);
+	  $('#info-panel').html(info_text);
     });
 
+	//Click on anywhere on the graph other than nodes will remove the highlights
+	//first recover all the node color
+	//second recover edge color, show or display edges depends on window.EdgeShowing
 	sigInst.bind('downgraph',function(){
-	      sigInst.iterEdges(function(e){
-	        e.color=edgeGreyColor;
-	      }).iterNodes(function(n){
+	      sigInst.iterNodes(function(n){
 	        n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
 	        n.attr['grey'] = 0;
+	      }).iterEdges(function(e){
+			e.color=e.source.color;
+			  if(window.EdgeShowing){
+				e.hidden=false;  
+			  }else{
+				  e.hidden=true;
+			  }
+	        // e.color=edgeGreyColor;
 	      }).draw(2,2,2);
+		  $('#info-panel').html('');
 	  });
+	  //clear info-panel
+	  $('#info-panel').html('');
 	
 	// .bind('outnodes',function(){
 	//       sigInst.iterEdges(function(e){

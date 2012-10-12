@@ -53,6 +53,7 @@
 				<button class="btn" id="stop-layout">Start Layout</button>
 				<button class="btn" id="rescale-graph">Rescale Graph</button>
 				<button class="btn" id="clear-graph">Clear Graph</button>
+				<button class="btn" id="show-edges">Show Edges</button>
 				<label>Group seperation strength 0-1</label>
 				<input type="number" min="0" max="1.0" step=0.01 value=0.0 id="group_separation">
 				<select id="data-file-select">
@@ -61,14 +62,10 @@
 		</div>
 		<div class="row-fluid">
 			<div class="span12">
-				<div id="info-panel">
-					<p>This is span2, which shows all the relevant information</p>
+				<div id="info-panel"></div>
+				<div class="sigma-parent full-height" id="sigma-example-parent">
+					<div class="sigma-expand" id="sigma-example"></div>
 				</div>
-				<!-- <div class="span10 full-height"> -->
-					<div class="sigma-parent full-height" id="sigma-example-parent">
-						<div class="sigma-expand" id="sigma-example"></div>
-					</div>
-				<!-- </div> -->
 			</div>
 	  </div>
 
@@ -90,6 +87,11 @@
       height: 600px;
 */    }
 	#info-panel {
+		overflow-x: auto;
+		overflow-y: auto;
+		word-wrap: normal;
+		white-space: pre;
+		display: inline-block;
   	  position: absolute;
   	  top:115px;
   	  left: 82%;
