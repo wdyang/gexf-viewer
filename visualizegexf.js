@@ -58,12 +58,22 @@ function init(gexffile) {
   // sigInst.parseGexf('user4_30_fin_district_r45_t1_excel.gexf');
   // sigInst.parseGexf(gexfname);
   // sigInst.parseGexf('graph.gexf');
-  sigInst.parseGexf(gexffile);
+  sigInst.parseGexf('data/'+gexffile);
   
   //default edge color setting by sigma.init not working. Manually set here
   var edgeGreyColor = '#000';
   var nodeGreyColor = '#404040';
   sigInst._core.graph.edges.forEach(function(e){  e.color=edgeGreyColor; });
+  
+  //finding the index of TITLE in nodes attributes
+  var n0=sigInst._core.graph.nodes[0];
+  attr=n0.attr.attributes;
+  var titleIdx=-1;
+  for(var i=0; i<attr.length; i+=1){
+	  if(attr[i].attr.indexOf('TITLE') != -1) titleIdx=i;
+  }
+  
+  if(titleIdx>-1)  sigInst._core.graph.nodes.forEach(function(n){ n.label = n.attr.attributes[titleIdx].val; });
   
   // assign nodes groupID based in color
   var color_list=Array();
@@ -85,7 +95,8 @@ function init(gexffile) {
 	// })
 
 	//assign edge weight according to whether two nodes belong to the same group
-  document.getElementById('group_separation').addEventListener('change',function(){
+    // document.getElementById('group_separation').addEventListener('change',function(){
+	$('#group_separation').change(function(){
 	  var weight=1.0-parseFloat(document.getElementById('group_separation').value);
 	  // console.log('intergroup weight changed to '+weight);
 	  sigInst._core.graph.edges.forEach(function(e){
@@ -93,7 +104,8 @@ function init(gexffile) {
 		  if (e.target.group==null) console.log(e.target);
 		  if (e.source.group!=e.target.group) e.weight = weight;
 	  });
-  }, false);
+  });
+  // }, false);
 
   
   
@@ -117,7 +129,8 @@ function init(gexffile) {
   },true);
 
   //overnode event for changing edge color
-  sigInst.bind('overnodes',function(event){
+  // sigInst.bind('overnodes',function(event){
+  sigInst.bind('downnodes',function(event){
       var nodes = event.content;
 	  // console.log(nodes);
       var neighbors = {};
@@ -143,15 +156,26 @@ function init(gexffile) {
           n.attr['grey'] = 0;
         }
       }).draw(2,2,2);
-    }).bind('outnodes',function(){
-      sigInst.iterEdges(function(e){
-        e.color=edgeGreyColor;
-      }).iterNodes(function(n){
-        n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
-        n.attr['grey'] = 0;
-      }).draw(2,2,2);
-  });
+    });
 
+	sigInst.bind('downgraph',function(){
+	      sigInst.iterEdges(function(e){
+	        e.color=edgeGreyColor;
+	      }).iterNodes(function(n){
+	        n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
+	        n.attr['grey'] = 0;
+	      }).draw(2,2,2);
+	  });
+	
+	// .bind('outnodes',function(){
+	//       sigInst.iterEdges(function(e){
+	//         e.color=edgeGreyColor;
+	//       }).iterNodes(function(n){
+	//         n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
+	//         n.attr['grey'] = 0;
+	//       }).draw(2,2,2);
+	//   });
+	
 	
 // add a popup window for displaying attributes
   (function(){
@@ -166,9 +190,19 @@ function init(gexffile) {
     //   { attr: 'Sit',   val: 'amet' }
     // ]
     function attributesToString(attr) {
+		var toIgnore=["GEOHASH", "LAT", "LNG", "TITLE", "degree", "modularity", "component", "eccent", "closness", "between"];
+		
+		function shouldInclude(st){
+			res=true;
+			toIgnore.forEach(function(s){if (st.indexOf(s)>-1) res=false;});
+			// console.log(st+':'+res);
+			return res;
+		}
+		
       return '<ul>' +
         attr.map(function(o){
-          return '<li>' + o.attr + ' : ' + o.val + '</li>';
+			if(shouldInclude(o.attr)){
+				return ('<li>' + o.attr + ' : ' + o.val + '</li>');};
         }).join('') +
         '</ul>';
     }
@@ -181,8 +215,7 @@ function init(gexffile) {
         node = n;
       },[event.content[0]]);
  	 
-	  console.log(attributesToString( node['attr']['attributes']));
-      popUp = $(
+	  popUp = $(
         '<div class="node-info-popup"></div>'
       ).append(
         // The GEXF parser stores all the attributes in an array named
@@ -211,7 +244,6 @@ function init(gexffile) {
 	  
  
       $('#sigma-example').append(popUp);
-	  console.log(popUp);
     }
  
     function hideNodeInfo(event) {

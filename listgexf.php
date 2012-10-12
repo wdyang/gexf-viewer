@@ -1,5 +1,5 @@
 <?php
-  $dir = ".";
+  $dir = "./data";
   $dh = opendir($dir);
   // echo "<select onchange='changePage(this)'>";
   // while (($file = readdir($dh)) !== false) {
