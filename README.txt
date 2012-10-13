@@ -16,3 +16,8 @@ To Do:
 3. apply separation force to a specific attributes, rather than just the group id.
 4. add separation within a cluster.
 
+10/12/2012
+gexf files goes to data folder.
+It takes whole window now, with information panel on the right.
+When a node is selected, the connected nodes are listed on the info-panel.
+When mouse hover over a name on the info-panel, the corresponding node in the graph lit up.
