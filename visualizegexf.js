@@ -61,8 +61,7 @@ $(document).ready(function(){
 	});
 	var EdgeShowing=false;
 	window.EdgeShowing=EdgeShowing;
-	
-	// $('#info-panel').dragscrollable();
+
 });
 
 function init(gexffile) {
@@ -168,7 +167,7 @@ function init(gexffile) {
       var nodes = event.content;
 	  // console.log(nodes);
       var neighbors = {};
-	  var info_text=$('<ul>');
+	  var info_array=[];
       sigInst.iterEdges(function(e){
         if(nodes.indexOf(e.source)<0 && nodes.indexOf(e.target)<0){   //edge doesn't include highlighted node
 			if(window.EdgeShowing){
@@ -193,10 +192,41 @@ function init(gexffile) {
         }else{
           n.color = n.attr['grey'] ? n.attr['true_color'] : n.color;
           n.attr['grey'] = 0;
-		  info_text.append('<li>'+n.label+'</li>');
+		  info_array.push([n.id, n.label]);
         }
       }).draw(2,2,2);
+	  var info_text=$('<ul>');
+	  info_array.sort(function(a,b){
+		  if( a[1]>b[1]) return 1;
+		  if (a[1]<b[1]) return -1;
+		  return 0;
+		  }).forEach(function(st){
+		  info_text.append('<li id="'+st[0]+'">'+st[1]+'</li>');
+		  // var btn='<button class="btn-custom" id="'+ st[0]+ '">'+st[1]+'</button>';
+		  // info_text.append('<li>'+btn+'</li>');
+	  });
 	  $('#info-panel').html(info_text);
+	
+	  //When mouse over a name, the corresponding node will highlight.
+	  	$('li').hover(function(){
+			id=$(this)[0].id;
+			sigInst.iterNodes(function(n){
+				if (n.id == id){
+					n.attr['tcolor']=n.color;
+					n.color='#FFF';
+					n.size=n.size*5;
+				};
+			}).draw(2,2,2);
+	  		},function(){
+				id=$(this)[0].id;
+				sigInst.iterNodes(function(n){
+					if (n.id == id){
+						n.color=n.attr['tcolor'];
+						n.size=n.size/5;
+					};
+				}).draw(2,2,2);
+		  	}
+		);
     });
 
 	//Click on anywhere on the graph other than nodes will remove the highlights
@@ -243,7 +273,7 @@ function init(gexffile) {
     //   { attr: 'Sit',   val: 'amet' }
     // ]
     function attributesToString(attr) {
-		var toIgnore=["GEOHASH", "LAT", "LNG", "TITLE", "degree", "modularity", "component", "eccent", "closness", "between"];
+		var toIgnore=["GEOHASH", "LAT", "LNG", "TITLE", "weighted degree", "modularity", "component", "eccent", "closness", "between"];
 		
 		function shouldInclude(st){
 			res=true;
@@ -309,6 +339,7 @@ function init(gexffile) {
   
   // Draw the graph :
   // sigInst.draw();
+  sigInst.dispatch('downgraph');
 }
 
 // if (document.addEventListener) {
