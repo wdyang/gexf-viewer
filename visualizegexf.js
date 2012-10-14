@@ -209,7 +209,9 @@ function init(gexffile) {
 	
 	  //When mouse over a name, the corresponding node will highlight.
 	  	$('li').hover(function(){
+			window.li=$(this);
 			id=$(this)[0].id;
+			$(this).css({'font-size':20, 'color':'#000', 'background-color':'#fff'});
 			sigInst.iterNodes(function(n){
 				if (n.id == id){
 					n.attr['tcolor']=n.color;
@@ -218,6 +220,7 @@ function init(gexffile) {
 				};
 			}).draw(2,2,2);
 	  		},function(){
+				$(this).css({'font-size':14, 'color':'#fff', 'background-color':'#000'});
 				id=$(this)[0].id;
 				sigInst.iterNodes(function(n){
 					if (n.id == id){
