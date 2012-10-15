@@ -806,6 +806,9 @@ function Graph() {
             Math.min(w / Math.max(xMax - xMin, 1),
                      h / Math.max(yMax - yMin, 1));
 
+	 if(typeof(FixScale)!=='undefined' && FixScale) scale=1.0;		//Weidong: prevent rescale
+	 window.scale=scale;
+	 
     // Size homothetic parameters:
     var a, b;
     if (!self.p.maxNodeSize && !self.p.minNodeSize) {
@@ -839,6 +842,14 @@ function Graph() {
         node['displayX'] = (node['x'] - (xMax + xMin) / 2) * scale + w / 2;
         node['displayY'] = (node['y'] - (yMax + yMin) / 2) * scale + h / 2;
       }
+
+	  //added by Weidong to directly use map coordinate
+	  	if ((typeof(UseMapCoordinate)!=='undefined') && UseMapCoordinate){
+	  		node['displayX']=node.attr['mapx'];
+	  		node['displayY']=node.attr['mapy'];
+	  	}
+
+
     });
 
     parseEdges && self.edges.forEach(function(edge) {
@@ -2585,6 +2596,150 @@ function Sigma(root, id) {
     start && sigma.chronos.runTasks();
     return self;
   };
+  
+  //added by Weidong Yang, prevent rescale
+  function draw_no_rescale(nodes, edges, labels, safe) {
+    if (safe && sigma.chronos.getGeneratorsIDs().some(function(id) {
+      return !!id.match(new RegExp('_ext_' + self.id + '$', ''));
+    })) {
+      return self;
+    }
+
+    var n = (nodes == undefined) ? self.p.drawNodes : nodes;
+    var e = (edges == undefined) ? self.p.drawEdges : edges;
+    var l = (labels == undefined) ? self.p.drawLabels : labels;
+
+    var params = {
+      nodes: n,
+      edges: e,
+      labels: l
+    };
+
+    self.p.lastNodes = n;
+    self.p.lastEdges = e;
+    self.p.lastLabels = l;
+
+    // Remove tasks:
+    clearSchedule();
+
+    // Rescale graph:
+    // self.graph.rescale(
+    //   self.width,
+    //   self.height,
+    //   n > 0,
+    //   e > 0
+    // ).setBorders();
+
+    // self.mousecaptor.checkBorders(
+    //    self.graph.borders,
+    //    self.width,
+    //    self.height
+    //  );
+    // 
+    //  self.graph.translate(
+    //    self.mousecaptor.stageX,
+    //    self.mousecaptor.stageY,
+    //    self.mousecaptor.ratio,
+    //    n > 0,
+    //    e > 0
+    //  );
+    // 
+    //  self.dispatch(
+    //    'graphscaled'
+    //  );
+ 
+    // Clear scene:
+    for (var k in self.domElements) {
+      if (
+        self.domElements[k].nodeName.toLowerCase() == 'canvas' &&
+        (params[k] == undefined || params[k] >= 0)
+      ) {
+        self.domElements[k].getContext('2d').clearRect(
+          0,
+          0,
+          self.domElements[k].width,
+          self.domElements[k].height
+        );
+      }
+    }
+
+    self.plotter.currentEdgeIndex = 0;
+    self.plotter.currentNodeIndex = 0;
+    self.plotter.currentLabelIndex = 0;
+
+    var previous = null;
+    var start = false;
+
+    if (n) {
+      if (n > 1) {
+        while (self.plotter.task_drawNode()) {}
+      }else {
+        sigma.chronos.addTask(
+          self.plotter.task_drawNode,
+          'node_' + self.id,
+          false
+        );
+
+        start = true;
+        previous = 'node_' + self.id;
+      }
+    }
+
+    if (l) {
+      if (l > 1) {
+        while (self.plotter.task_drawLabel()) {}
+      } else {
+        if (previous) {
+          sigma.chronos.queueTask(
+            self.plotter.task_drawLabel,
+            'label_' + self.id,
+            previous
+          );
+        } else {
+          sigma.chronos.addTask(
+            self.plotter.task_drawLabel,
+            'label_' + self.id,
+            false
+          );
+        }
+
+        start = true;
+        previous = 'label_' + self.id;
+      }
+    }
+
+    if (e) {
+      if (e > 1) {
+        while (self.plotter.task_drawEdge()) {}
+      }else {
+        if (previous) {
+          sigma.chronos.queueTask(
+            self.plotter.task_drawEdge,
+            'edge_' + self.id,
+            previous
+          );
+        }else {
+          sigma.chronos.addTask(
+            self.plotter.task_drawEdge,
+            'edge_' + self.id,
+            false
+          );
+        }
+
+        start = true;
+        previous = 'edge_' + self.id;
+      }
+    }
+
+    self.dispatch(
+      'draw'
+    );
+
+    self.refresh();
+
+    start && sigma.chronos.runTasks();
+    return self;
+  };
 
   /**
    * Draws the hover and active nodes labels.
@@ -2649,6 +2804,7 @@ function Sigma(root, id) {
   }
 
   this.draw = draw;
+  this.draw_no_rescale = draw_no_rescale;		//added by Weidong to prevent rescale
   this.resize = resize;
   this.refresh = refresh;
   this.drawHover = drawHover;
@@ -2761,6 +2917,12 @@ function SigmaPublic(sigmaInstance) {
 
   this.draw = function(nodes, edges, labels, safe) {
     s.draw(nodes, edges, labels, safe);
+    return self;
+  };
+  
+  //added by Weidong to prevent rescale
+  this.draw_no_rescale=function(nodes, edges, labels, safe) {
+    s.draw_no_rescale(nodes, edges, labels, safe);
     return self;
   };
 
