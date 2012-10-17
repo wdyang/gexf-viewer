@@ -16,12 +16,19 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/prettify.css">
 
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+ -->
+    <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.9.0.custom.min.js"></script>
+    <script type="text/javascript" src="js/jquery.color.js"></script>
 
     <script src="js/prettify.js"></script>
     <script src="js/sigma.concat.js"></script>
     <script src="plugins/sigma.forceatlas2.js"></script>
     <script src="plugins/sigma.parseGexf.js"></script>
+    <script src="initgraph.js"></script>
+    <script src="visualizegexf.js"></script>
+	
 	<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 	<link rel="apple-touch-icon" href="apple-touch-icon.png" />
 <!--	<script>
@@ -55,6 +62,15 @@
 				<button class="btn-custom" id="rescale-graph">Rescale Graph</button>
 				<button class="btn-custom" id="clear-graph">Clear Graph</button>
 				<button class="btn-custom" id="show-edges">Show Edges</button>
+				<button class="btn-custom" id="show-map">Show Map</button>
+				<button class="btn-custom" id="map-move-left"><</button>
+				<button class="btn-custom" id="map-move-up">^</button>
+				<button class="btn-custom" id="map-move-down">v</button>
+				<button class="btn-custom" id="map-move-right">></button>
+				<button class="btn-custom" id="map-zoom-in">+</button>
+				<button class="btn-custom" id="map-zoom-out">-</button>
+				<button class="btn-custom" id="map-brighter">Brighter</button>
+				<button class="btn-custom" id="map-darker">Darker</button>
 				<label>Group seperation strength 0-1</label>
 				<input type="number" min="0" max="1.0" step=0.01 value=0.0 id="group_separation">
 				<select id="data-file-select">
@@ -73,7 +89,6 @@
 			</div>
 	  </div>
 
-  <script src="visualizegexf.js"></script>
 
   <style type="text/css">
     /* sigma.js context : */

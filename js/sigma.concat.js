@@ -806,7 +806,7 @@ function Graph() {
             Math.min(w / Math.max(xMax - xMin, 1),
                      h / Math.max(yMax - yMin, 1));
 
-	 if(typeof(FixScale)!=='undefined' && FixScale) scale=1.0;		//Weidong: prevent rescale
+	 if(AppState.FixScale) scale=1.0;		//Weidong: prevent rescale
 	 window.scale=scale;
 	 
     // Size homothetic parameters:
@@ -844,7 +844,7 @@ function Graph() {
       }
 
 	  //added by Weidong to directly use map coordinate
-	  	if ((typeof(UseMapCoordinate)!=='undefined') && UseMapCoordinate){
+	  	if ((typeof(AppState.UseMapCoordinate)!=='undefined') && AppState.UseMapCoordinate){
 	  		node['displayX']=node.attr['mapx'];
 	  		node['displayY']=node.attr['mapy'];
 	  	}
