@@ -66,6 +66,7 @@ function init(gexffile) {
 		  group_id++;
 	  }
 	  node.group=color_list[color];
+	  node.attr.tcolor=node.color;
   });
   // for (var k in color_list) { console.log('key is: '+k+', value is: '+color_list[k]);}
 
@@ -110,8 +111,13 @@ function init(gexffile) {
   //overnode event for changing edge color
   // sigInst.bind('overnodes',function(event){
   sigInst.bind('downnodes',function(event){
+  	  window.mye=event;
       var nodes = event.content;
-	  window.clicknodes=nodes;
+  	  window.clicknodes=nodes;
+	  drawDownNodes(nodes);
+  });
+  
+	var drawDownNodes=function(nodes){	  
       var neighbors = {};
 	  var info_array=[];
       sigInst.iterEdges(function(e){
@@ -160,10 +166,12 @@ function init(gexffile) {
 	  	$('li').hover(function(){
 			window.li=$(this);
 			id=$(this)[0].id;
+			
+			console.log(id);
 			$(this).css({'font-size':20, 'color':'#000', 'background-color':'rgba(255,255,255,150)'});
 			sigInst.iterNodes(function(n){
 				if (n.id == id){
-					n.attr['tcolor']=n.color;
+					// n.attr['tcolor']=n.color;
 					n.color='#FFF';
 					n.attr['tsize']=n.size;
 					n.size=n.size*3 < nodeMaxSize ? n.size*3 : nodeMaxSize;
@@ -180,7 +188,19 @@ function init(gexffile) {
 				}).draw(2,2,2);
 		  	}
 		);
-    });
+
+	  	$('li').click(function(){
+			window.li=$(this);
+			id=$(this)[0].id;
+			
+			console.log(id);
+			sigInst.iterNodes(function(n){ n.color=n.attr.tcolor; });
+			drawDownNodes([id]);
+		});
+
+		
+    };
+
 
 	//Click on anywhere on the graph other than nodes will remove the highlights
 	//first recover all the node color
@@ -233,7 +253,7 @@ function init(gexffile) {
         '</ul>';
     }
  
-    function showNodeInfo(event) {
+    var showNodeInfo=function(event) {
       popUp && popUp.remove();
  
       var node;
@@ -271,12 +291,13 @@ function init(gexffile) {
  
       $('#sigma-example').append(popUp);
     }
- 
-    function hideNodeInfo(event) {
+	AppObj.showNodeInfo=showNodeInfo;
+    var hideNodeInfo=function(event) {
       popUp && popUp.remove();
       popUp = false;
     }
- 
+	AppObj.hideNodeInfo=hideNodeInfo;
+ 	
     sigInst.bind('overnodes',showNodeInfo).bind('outnodes',hideNodeInfo).draw();
   })();
   

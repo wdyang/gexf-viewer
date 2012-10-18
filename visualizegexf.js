@@ -14,9 +14,12 @@ var AppState={
 var AppObj={
 	map: -1,
 	mapbnd: 0,
+	mapSuggestZoom: 16,
 	nodeTravelDelta : 0.04,
 	mapLightUpDelta : -0.03,		//To increment #sigma-example background alpha from 1 to 0.4
-	sigmaLayerAlpha : 0.4
+	sigmaLayerAlpha : 0.4,
+	showNodeInfo : null,
+	hideNodeInfo : null
 };
 
 $(document).ready(function(){
@@ -86,7 +89,7 @@ $(document).ready(function(){
 		    $('#sigma-example').css({"background":"rgba(0,0,0,1.0)"});
 			if (typeof(sigInst)!='undefined'){  //has graph
 			    centerMap();
-			    AppObj.map.setZoom(16);
+			    AppObj.map.setZoom(AppObj.mapSuggestZoom);
 				$('#map_canvas').show();
 				sigInst.iterNodes(function(n){
 					n.attr.orgX=n.displayX;
@@ -177,7 +180,7 @@ $(document).ready(function(){
 		}
 	});
 	$('#map-move-left').click(function(){shiftMapByPercent(0, -0.1);});
-	$('#map-move-right').click(function(){shiftByMapPercent(0, 0.1);});
+	$('#map-move-right').click(function(){shiftMapByPercent(0, 0.1);});
 	$('#map-move-up').click(function(){shiftMapByPercent(0.1, 0);});
 	$('#map-move-down').click(function(){shiftMapByPercent(-0.1, 0);});
 	
@@ -223,6 +226,9 @@ $(document).ready(function(){
 });
 
 
+// sigInst._core.graph.nodes.map(function(n){return !!(n.attr.attributes[latIdx]);});
+
+
 function centerMap(){
   var lats=sigInst._core.graph.nodes.map(function(n){return parseFloat(n.attr.attributes[latIdx].val);});
   var lngs=sigInst._core.graph.nodes.map(function(n){return parseFloat(n.attr.attributes[lngIdx].val);});
@@ -236,12 +242,34 @@ function centerMap(){
   lngmax=Math.max.apply(null, lngs);
   lngmin=Math.min.apply(null, lngs);
   
+rangelat = latmax-latmin;
+factorlat=rangelat/0.0004;
+raiselat=Math.ceil(Math.log(factorlat) / Math.log(2));
+  
+rangelng = lngmax-lngmin;
+factorlng=rangelng/0.0004;
+raiselng=Math.ceil(Math.log(factorlng) / Math.log(2));
+
+AppObj.mapSuggestZoom = 22-Math.max(raiselat, raiselng);
+  
   mapc=new google.maps.LatLng(latc, lngc);
   AppObj.map.setCenter(mapc);
   // $('#sigma-example').css({"background":"rgba(0,0,0,0.4)"});
   
 }
 
+var mapRanges={};
+
+var mapRange=function(){
+	AppObj.mapbnd=AppObj.map.getBounds();
+	NE = AppObj.mapbnd.getNorthEast();
+	SW = AppObj.mapbnd.getSouthWest();
+	rangeLat = NE.lat() - SW.lat();
+	rangeLng = NE.lng()-SW.lng();
+	zoom=AppObj.map.getZoom();
+	mapRanges[zoom]=[rangeLat, rangeLng];
+	console.log('zoom:'+zoom+' rangeLat:'+rangeLat+' rangeLng'+rangeLng);
+}
 
 //google map
 
