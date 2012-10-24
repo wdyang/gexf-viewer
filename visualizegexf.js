@@ -1,8 +1,8 @@
 //debugging purpose
-/*
-nodes=sigInst._core.graph.nodes;
-edges=sigInst._core.graph.edges;
-*/
+
+// nodes=sigInst._core.graph.nodes;
+// edges=sigInst._core.graph.edges;
+
 //globle variables
 var AppState={
 	EdgeShowing: false,
@@ -19,7 +19,13 @@ var AppObj={
 	mapLightUpDelta : -0.03,		//To increment #sigma-example background alpha from 1 to 0.4
 	sigmaLayerAlpha : 0.4,
 	showNodeInfo : null,
-	hideNodeInfo : null
+	hideNodeInfo : null,
+	edgeGreyColor : '#404040', //default edge color setting by sigma.init not working. Manually set here
+	nodeGreyColor : '#404040',
+	latIdx : -1,
+	lngIdx : -1,
+	nodeMaxSize : -1,
+	popupAttrShow: ["title", "subject", "type", "rating", "neighborhood"]
 };
 
 $(document).ready(function(){
@@ -230,8 +236,8 @@ $(document).ready(function(){
 
 
 function centerMap(){
-  var lats=sigInst._core.graph.nodes.map(function(n){return parseFloat(n.attr.attributes[latIdx].val);});
-  var lngs=sigInst._core.graph.nodes.map(function(n){return parseFloat(n.attr.attributes[lngIdx].val);});
+  var lats=sigInst._core.graph.nodes.map(function(n){return parseFloat(n.attr.attributes[AppObj.latIdx].val);});
+  var lngs=sigInst._core.graph.nodes.map(function(n){return parseFloat(n.attr.attributes[AppObj.lngIdx].val);});
   window.lats=lats;
   window.lngs=lngs;
   
@@ -320,8 +326,8 @@ function drawOnMap(levelDelta){
 	AppState.UseMapCoordinate=true;
 	
     sigInst.iterNodes(function(n){
-    	  lat=parseFloat(n.attr.attributes[latIdx].val);
-    	  lng=parseFloat(n.attr.attributes[lngIdx].val);
+    	  lat=parseFloat(n.attr.attributes[AppObj.latIdx].val);
+    	  lng=parseFloat(n.attr.attributes[AppObj.lngIdx].val);
     	  disp=latlng2disp(lat, lng, AppObj.mapbnd, disp_height, disp_width);
 		  loc=disp;
     	  // loc = display2xy(disp);
@@ -393,10 +399,10 @@ function shiftLocLatLng(delta){
 	deltaLat=delta[0];
 	deltaLng=delta[1];
 	sigInst.iterNodes(function(n){
-  	  lat=parseFloat(n.attr.attributes[latIdx].val)+deltaLat;
-  	  lng=parseFloat(n.attr.attributes[lngIdx].val)+deltaLng;
-	  n.attr.attributes[latIdx].val=''+lat;
-	  n.attr.attributes[lngIdx].val=''+lng;
+  	  lat=parseFloat(n.attr.attributes[AppObj.latIdx].val)+deltaLat;
+  	  lng=parseFloat(n.attr.attributes[AppObj.lngIdx].val)+deltaLng;
+	  n.attr.attributes[AppObj.latIdx].val=''+lat;
+	  n.attr.attributes[AppObj.lngIdx].val=''+lng;
 	});
 	drawOnMap(0.1);
 }
