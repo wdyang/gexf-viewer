@@ -107,14 +107,18 @@ function init(gexffile) {
 
 	addMouseEvent();
 
-
-
-
 	//clear info-panel
 	$('#info-panel').html('').css({"opacity":0});
 	
 	// add a popup window for displaying attributes
 	addPopUp();
+	addFilter('CLASSY', '#select-classy');
+	addFilter('TYPE', '#select-type');
+	addFilter('NEIGHBORHOOD', '#select-neighborhood');
+	addFilter('HIP', '#select-hip');
+	addFilter('GIRLS', '#select-girls');
+	addFilter('KIDS', '#select-kids');
+	addFilter('DATING', '#select-dating');
 }
 
 

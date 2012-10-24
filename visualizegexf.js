@@ -29,6 +29,16 @@ var AppObj={
 };
 
 $(document).ready(function(){
+	$('#select-type').hide();
+	$('#select-neighborhood').hide();
+	$('#select-classy').hide();
+	$('#select-hip').hide();
+	$('#select-girls').hide();
+	$('#select-kids').hide();
+	$('#select-dating').hide();
+
+
+
 	$('#clear-graph').click(function(){
 		if(!(typeof(sigInst)==='undefined')){
 			console.log("clearing house");
@@ -227,8 +237,6 @@ $(document).ready(function(){
 	
     initializeMap();
 	$('#sigma-example').css({"background":"rgba(0,0,0,1.0)"});
-	
-	
 });
 
 
