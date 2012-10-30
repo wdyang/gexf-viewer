@@ -3,7 +3,6 @@ var addFilter=function(attr, selector_id){
 	
 	// attr='CLASSY';
 	// selector_id = '#select-classy'
-	$(selector_id).show();
 	var nodes=sigInst._core.graph.nodes;
 	
 	var attributes=sigInst._core.graph.nodes[0].attr.attributes;
@@ -15,6 +14,8 @@ var addFilter=function(attr, selector_id){
 	if(attrIdx < 0){
 		return;
 	}
+
+	$(selector_id).show();
 
 	vals=nodes.reduce(function(res, n){
 		val = n.attr.attributes[attrIdx].val;
@@ -54,4 +55,6 @@ var addFilter=function(attr, selector_id){
 	};
 	
 };
+
+
 
