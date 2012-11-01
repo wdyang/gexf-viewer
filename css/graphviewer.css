@@ -1,9 +1,5 @@
 /* sigma.js context : */
-#map_canvas{
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	background: rgba(0,0,0,1);
+.position_graph {
 	position: absolute;
 	top: 115px;
 	left: 5px;
@@ -11,20 +7,30 @@
 	bottom: 5px;
 }
 
+#map_canvas{
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	background: rgba(0,0,0,1);
+/*	position: absolute;
+	top: 115px;
+	left: 5px;
+	right: 0;
+	bottom: 5px;
+*/}
+
 .sigma-parent {
   border-radius: 4px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   background: rgba(0,0,0,0);
-  position: absolute;
+/*  position: absolute;
   top: 115px;
   left: 5px;
-/*	  right: 18%;
-*/		right: 0;
+  right: 0;
   bottom: 5px;
-/*      position: relative;
-  height: 600px;
-*/    }
+*/}
+
 #info-panel {
 	overflow-x: auto;
 	overflow-y: auto;

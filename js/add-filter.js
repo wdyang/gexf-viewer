@@ -3,7 +3,6 @@ var addFilter=function(attr, selector_id){
 	
 	// attr='CLASSY';
 	// selector_id = '#select-classy'
-	$(selector_id).show();
 	var nodes=sigInst._core.graph.nodes;
 	
 	var attributes=sigInst._core.graph.nodes[0].attr.attributes;
@@ -15,6 +14,8 @@ var addFilter=function(attr, selector_id){
 	if(attrIdx < 0){
 		return;
 	}
+
+	$(selector_id).show();
 
 	vals=nodes.reduce(function(res, n){
 		val = n.attr.attributes[attrIdx].val;
@@ -28,13 +29,19 @@ var addFilter=function(attr, selector_id){
 	});
 	
 	$(selector_id).change(function() {
-		unHideAllNodes();
+		// unHideAllNodes();
 		val=$(selector_id).val();
+		
 		console.log("selected "+attr +" of "+ val);
 		if (val.indexOf("All")<0){   //Selected anything but All
 			console.log("hiding...")
-			showOnlyNodesOfAttr(val);
-		} 
+			FilterSystem.addFilter(attrIdx, val);
+			// showOnlyNodesOfAttr(val);
+		}else{
+			FilterSystem.removeFilter(attrIdx);
+		}
+		FilterSystem.doFilter();
+		
 		sigInst.draw(2,2,2);
 	});
 	
@@ -54,4 +61,37 @@ var addFilter=function(attr, selector_id){
 	};
 	
 };
+
+var FilterSystem=(function(){
+	var filterList={};
+	var addFilter=function(attrIdx, val){
+		filterList[attrIdx]= val;
+	};
+	var removeFilter=function(attrIdx){
+		delete filterList[attrIdx];
+	};
+	var unHideAllNodes=function(){
+		sigInst.iterNodes(function(n){n.hidden=false;});
+	};
+	
+	var hideByAttr=function(attrIdx, val){
+		sigInst.iterNodes(function(n){
+			if (n.attr.attributes[attrIdx].val != val){ n.hidden=true;}
+		});
+	};
+	
+	var doFilter=function(){
+		unHideAllNodes();
+		for(attrIdx in filterList){
+			hideByAttr(attrIdx, filterList[attrIdx]);
+		}
+	};
+	return {
+		addFilter: addFilter,
+		removeFilter: removeFilter,
+		doFilter: doFilter,
+		filterList: filterList
+	};
+}());
+
 

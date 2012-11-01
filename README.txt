@@ -1,3 +1,6 @@
+10/31/2012
+Bug: Node size failed to recover to original size if it was clicked on the info panel.
+
 GEXF viewer with Sigma.js
 
 version 0.1
@@ -12,9 +15,11 @@ Extension from sigma.js:
 
 To Do:
 1. make it take full screen.
-2. select which attributes to show.
+2. select which attributes to show.						Done
 3. apply separation force to a specific attributes, rather than just the group id.
 4. add separation within a cluster.
+5. Do clustering in browser, using clusterfck, worker
+6. FB login in browser, pull data real time, show nodes real time
 
 10/12/2012
 gexf files goes to data folder.

@@ -48,7 +48,12 @@ function init(gexffile) {
   
 	if(titleIdx>-1)  sigInst._core.graph.nodes.forEach(function(n){ n.label = n.attr.attributes[titleIdx].val; });
 	var nodeMaxSize=-1;
-	sigInst.iterNodes(function(n){nodeMaxSize = (n.size > nodeMaxSize ? n.size : nodeMaxSize);});
+	sigInst.iterNodes(function(n){
+		nodeMaxSize = (n.size > nodeMaxSize ? n.size : nodeMaxSize);
+	});
+	sigInst.iterNodes(function(n){
+		n.attr['tsize']=n.size;				//for size restoration
+	});
 	console.log("max node size is "+ nodeMaxSize);
 	AppObj.nodeMaxSize=nodeMaxSize;
     

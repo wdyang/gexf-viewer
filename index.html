@@ -62,39 +62,41 @@
 		<div class="row-fluid">
 			<!-- <h2 class="span12" id="post-title">Gexf viewer with sigma.js</h2> -->
 			<div class="span12"> <!-- buttons-container"> -->
-				<button class="btn-custom" id="stop-layout">Start Layout</button>
-				<button class="btn-custom" id="rescale-graph">Rescale Graph</button>
-				<button class="btn-custom" id="clear-graph">Clear Graph</button>
-				<button class="btn-custom" id="show-edges">Show Edges</button>
-				<button class="btn-custom" id="show-map">Show Map</button>
-				<button class="btn-custom" id="map-move-left"><</button>
-				<button class="btn-custom" id="map-move-up">^</button>
-				<button class="btn-custom" id="map-move-down">v</button>
-				<button class="btn-custom" id="map-move-right">></button>
-				<button class="btn-custom" id="map-zoom-in">+</button>
-				<button class="btn-custom" id="map-zoom-out">-</button>
-				<button class="btn-custom" id="map-brighter">Brighter</button>
-				<button class="btn-custom" id="map-darker">Darker</button>
-				
-				<label>Group seperation strength 0-1</label>
-				<input type="number" min="0" max="1.0" step=0.01 value=0.0 id="group_separation">
-				<select id="data-file-select">Select</select>
-				
-				<select class="attr-filter" id="select-type"></select>
-				<select class="attr-filter" id="select-neighborhood"></select>
-				<select class="attr-filter" id="select-classy"></select>
-				<select class="attr-filter" id="select-hip"></select>
-				<select class="attr-filter" id="select-girls"></select>
-				<select class="attr-filter" id="select-kids"></select>
-				<select class="attr-filter" id="select-dating"></select>
+				<div class="span12">
+					<button class="btn-custom" id="stop-layout">Start Layout</button>
+					<button class="btn-custom" id="rescale-graph">Rescale Graph</button>
+					<button class="btn-custom" id="clear-graph">Clear Graph</button>
+					<button class="btn-custom" id="show-edges">Show Edges</button>
+					<button class="btn-custom" id="show-map">Show Map</button>
+					<button class="btn-custom" id="map-move-left"><</button>
+					<button class="btn-custom" id="map-move-up">^</button>
+					<button class="btn-custom" id="map-move-down">v</button>
+					<button class="btn-custom" id="map-move-right">></button>
+					<button class="btn-custom" id="map-zoom-in">+</button>
+					<button class="btn-custom" id="map-zoom-out">-</button>
+					<button class="btn-custom" id="map-brighter">Brighter</button>
+					<button class="btn-custom" id="map-darker">Darker</button>
+				</div>
+				<!-- <label>Group seperation strength 0-1</label> -->
+				<div class="span12">			
+					<input type="number" min="0" max="1.0" step=0.01 value=0.0 id="group_separation">
+					<select id="data-file-select">Select</select>
+					<select class="attr-filter" id="select-type"></select>
+					<select class="attr-filter" id="select-neighborhood"></select>
+					<select class="attr-filter" id="select-classy"></select>
+					<select class="attr-filter" id="select-hip"></select>
+					<select class="attr-filter" id="select-girls"></select>
+					<select class="attr-filter" id="select-kids"></select>
+					<select class="attr-filter" id="select-dating"></select>
+				</div>
 			</div>
 		</div>
 		<div class="row-fluid">
 			<div class="span12">
-				<div id="map_canvas"></div>
+				<div id="map_canvas" class="position_graph"></div>
 				
 				<!-- <img src='img/test.png'> -->
-				<div class="sigma-parent full-height" id="sigma-example-parent">
+				<div class="sigma-parent full-height position_graph" id="sigma-example-parent">
 					<div class="sigma-expand" id="sigma-example" style="background:rgba(0,0,0,0)"></div>
 				</div>
 				<div id="info-panel"></div>

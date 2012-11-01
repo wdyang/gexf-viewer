@@ -60,7 +60,7 @@ var addMouseEvent=function(){
 				if (n.id == id){
 					// n.attr['tcolor']=n.color;
 					n.color='#FFF';
-					n.attr['tsize']=n.size;
+					// n.attr['tsize']=n.size;
 					n.size=n.size*3 < AppObj.nodeMaxSize ? n.size*3 : AppObj.nodeMaxSize;
 				};
 			}).draw(2,2,2);
@@ -80,7 +80,7 @@ var addMouseEvent=function(){
 			id=$(this)[0].id;
 			
 			console.log(id);
-			sigInst.iterNodes(function(n){ n.color=n.attr.tcolor; });
+			sigInst.iterNodes(function(n){ n.color=n.attr.tcolor; n.size=n.attr.tsize});
 			addDownNodes([id]);
 		});
 
@@ -148,7 +148,7 @@ var addMouseEvent=function(){
 				if (n.id == id){
 					// n.attr['tcolor']=n.color;
 					n.color='#FFF';
-					n.attr['tsize']=n.size;
+					// n.attr['tsize']=n.size;
 					n.size=n.size*3 < AppObj.nodeMaxSize ? n.size*3 : AppObj.nodeMaxSize;
 				};
 			}).draw(2,2,2);
@@ -168,7 +168,7 @@ var addMouseEvent=function(){
 			id=$(this)[0].id;
 			
 			console.log(id);
-			sigInst.iterNodes(function(n){ n.color=n.attr.tcolor; });
+			sigInst.iterNodes(function(n){ n.color=n.attr.tcolor; n.size=n.attr.tsize});
 			addDownNodes([id]);
 		});
 	};
