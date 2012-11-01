@@ -29,14 +29,12 @@ var addFilter=function(attr, selector_id){
 	});
 	
 	$(selector_id).change(function() {
-		// unHideAllNodes();
 		val=$(selector_id).val();
 		
 		console.log("selected "+attr +" of "+ val);
 		if (val.indexOf("All")<0){   //Selected anything but All
 			console.log("hiding...")
 			FilterSystem.addFilter(attrIdx, val);
-			// showOnlyNodesOfAttr(val);
 		}else{
 			FilterSystem.removeFilter(attrIdx);
 		}
@@ -93,5 +91,4 @@ var FilterSystem=(function(){
 		filterList: filterList
 	};
 }());
-
 
