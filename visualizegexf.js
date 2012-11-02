@@ -237,6 +237,31 @@ $(document).ready(function(){
 	
     initializeMap();
 	$('#sigma-example').css({"background":"rgba(0,0,0,1.0)"});
+	
+	$('#use-edge-weight').change(function(){
+		if(typeof(sigInst)=="undefined") return;
+		var checkbox=$('#use-edge-weight');
+		console.log('checkbox for edge weight is '+checkbox.attr('checked'));
+		if (checkbox.attr('checked')=='checked'){
+			sigInst.graphProperties({maxEdgeSize: 5, minEdgeSize:0.5});
+			var maxEdgeWeight=1;
+			var minEdgeWeight=1;
+			sigInst.iterEdges(function(e){
+				maxEdgeWeight = e.weight>maxEdgeWeight ? e.weight : maxEdgeWeight;
+				minEdgeWeight = e.weight<maxEdgeWeight ? e.weight : maxEdgeWeight;
+			});
+				
+			sigInst.iterEdges(function(e){
+				e.size = (e.weight-minEdgeWeight)  / (maxEdgeWeight-minEdgeWeight) * 10.0;
+			});
+		}else{
+			sigInst.graphProperties({maxEdgeSize: 1.5, minEdgeSize:1.5});
+			sigInst.iterEdges(function(e){
+				e.size = 1.0;
+			});
+		}
+		sigInst.draw(2,2,2);
+	});
 });
 
 

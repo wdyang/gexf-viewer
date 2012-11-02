@@ -30,6 +30,7 @@ function init(gexffile) {
 	// var EdgeShowing=false;
 	// window.EdgeShowing=EdgeShowing;
 	sigInst._core.graph.edges.forEach(function(e){  e.hidden=true; });
+	
   
 	//finding the index of TITLE in nodes attributes
 	var n0=sigInst._core.graph.nodes[0];
