@@ -42,8 +42,9 @@ $(document).ready(function(){
 	$('#clear-graph').click(function(){
 		if(!(typeof(sigInst)==='undefined')){
 			console.log("clearing house");
-			sigInst._core.graph.nodes=[];
-			sigInst._core.graph.edges=[];	
+			sigInst.emptyGraph();
+			// sigInst._core.graph.nodes=[];
+			// sigInst._core.graph.edges=[];	
 			sigInst.draw();	
 		} 
 	});
@@ -51,8 +52,9 @@ $(document).ready(function(){
 	$('#data-file-select').change(function() {
 		if(!(typeof(sigInst)==='undefined')){
 			console.log("clearing house");
-			sigInst._core.graph.nodes=[];
-			sigInst._core.graph.edges=[];		
+			sigInst.emptyGraph();
+			// sigInst._core.graph.nodes=[];
+			// sigInst._core.graph.edges=[];		
 			sigInst.draw();
 		} 
 		init($(this).attr('value'));
@@ -74,7 +76,7 @@ $(document).ready(function(){
 		}
 	});
 	
-    $('#show-edges').click(function(){
+  $('#show-edges').click(function(){
 		if (!AppState.EdgeShowing){
 			if (typeof(sigInst)!='undefined'){
 				sigInst.dispatch('downgraph'); //first clear the graph
@@ -100,7 +102,7 @@ $(document).ready(function(){
 		}
 	});
 	
-    $('#show-map').click(function(){
+  $('#show-map').click(function(){
 		if (!AppState.MapShowing){  //turning on map
 		    $('#sigma-example').css({"background":"rgba(0,0,0,1.0)"});
 			if (typeof(sigInst)!='undefined'){  //has graph
@@ -129,7 +131,6 @@ $(document).ready(function(){
 		}
 	});
 
-	
 	var isiPad = navigator.userAgent.match(/iPad/i) != null;
 	if (isiPad){
 		$('#stop-layout').hide();
@@ -175,7 +176,6 @@ $(document).ready(function(){
 			}
 		});
 	}
-
 	
 	$('#sigma-example').click(function(e){
 		window.e = e;
@@ -269,10 +269,10 @@ $(document).ready(function(){
 
 
 function centerMap(){
-  var lats=sigInst._core.graph.nodes.map(function(n){return parseFloat(n.attr.attributes[AppObj.latIdx].val);});
-  var lngs=sigInst._core.graph.nodes.map(function(n){return parseFloat(n.attr.attributes[AppObj.lngIdx].val);});
-  window.lats=lats;
-  window.lngs=lngs;
+  var tlats=sigInst._core.graph.nodes.map(function(n){return parseFloat(n.attr.attributes[AppObj.latIdx].val);});
+  var tlngs=sigInst._core.graph.nodes.map(function(n){return parseFloat(n.attr.attributes[AppObj.lngIdx].val);});
+  window.lats=tlats.sort().slice(2, tlats.length-2); //remove two extreme values from both end
+  window.lngs=tlngs.sort().slice(2, tlngs.length-2);
   
   latc=lats.reduce(function(a,b){return a+b;}, 0)/lats.length;
   lngc=lngs.reduce(function(a,b){return a+b;}, 0)/lngs.length;
@@ -281,16 +281,17 @@ function centerMap(){
   lngmax=Math.max.apply(null, lngs);
   lngmin=Math.min.apply(null, lngs);
   
-rangelat = latmax-latmin;
-factorlat=rangelat/0.0004;
-raiselat=Math.ceil(Math.log(factorlat) / Math.log(2));
+	rangelat = latmax-latmin;
+	factorlat=rangelat/0.0004;
+	raiselat=Math.ceil(Math.log(factorlat) / Math.log(2));
   
-rangelng = lngmax-lngmin;
-factorlng=rangelng/0.0004;
-raiselng=Math.ceil(Math.log(factorlng) / Math.log(2));
+	rangelng = lngmax-lngmin;
+	factorlng=rangelng/0.0004;
+	raiselng=Math.ceil(Math.log(factorlng) / Math.log(2));
 
-AppObj.mapSuggestZoom = 22-Math.max(raiselat, raiselng);
+	AppObj.mapSuggestZoom = 22-Math.max(raiselat, raiselng);
   
+	console.log('map centered at:('+latc+','+lngc+')');
   mapc=new google.maps.LatLng(latc, lngc);
   AppObj.map.setCenter(mapc);
   // $('#sigma-example').css({"background":"rgba(0,0,0,0.4)"});
